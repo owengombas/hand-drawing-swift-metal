@@ -8,6 +8,7 @@
 - Add a dot at the start/end of a line (round the line)
 - Colors, pointSize, eraser, ... tools
 - Handle touchesEstimatedPropertiesUpdated
+- Drawing vertices buffer for a fluid draw (norm selector)
 
 ## See also
 - [ios_metal_bezier_renderer](https://github.com/eldade/ios_metal_bezier_renderer)
