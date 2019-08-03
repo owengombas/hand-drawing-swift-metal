@@ -1,6 +1,6 @@
 # Draw on an iOS device using Metal
 
-TODO:
+## TODO:
 - README 😬
 - Force (pointsize) changed -> correct link between triangles
 - Move vertices calculation to shaders
