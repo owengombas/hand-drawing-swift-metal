@@ -25,7 +25,7 @@ struct FragmentInfos {
 };
 
 vertex Vertex main_vertex(
-  constant VertexInfos &infos [[ buffer(0) ]],
+  device VertexInfos &infos [[ buffer(0) ]],
   device Vertex *vertices [[ buffer(1) ]],
   uint vertexId [[ vertex_id ]]
 ) {

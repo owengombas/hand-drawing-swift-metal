@@ -34,6 +34,11 @@ class ViewController: UIViewController {
         renderer.touched(touches, event)
     }
     
+    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+        renderer.touched(touches, event)
+        renderer.endTouch()
+    }
+    
     override func touchesEstimatedPropertiesUpdated(_ touches: Set<UITouch>) {
         // renderer.touched(touches, nil)
     }

@@ -88,4 +88,17 @@ class Triangle {
         
         return [_bVertex!, _cVertex!, dVertex]
     }
+    
+    func calculateEndRightTriangle() -> [Vertex] {
+        let vcb = Vector(_cVertex!, _bVertex!).divide(2)
+        let dVertex = vcb
+            .rotatePerp()
+            .normalize()
+            .scale(vcb.norm)
+            .addVector(_cVertex!.toVector())
+            .addVector(vcb)
+            .toVertex()
+        
+        return [_bVertex!, _cVertex!, dVertex]
+    }
 }

@@ -29,8 +29,6 @@ class Renderer: NSObject, MTKViewDelegate {
 
         device = mtkView.device
 
-        mtkView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-        mtkView.framebufferOnly = true
         mtkView.preferredFramesPerSecond = 120
         mtkView.sampleCount = 4
         
@@ -38,7 +36,6 @@ class Renderer: NSObject, MTKViewDelegate {
         pipelineDescriptor = MTLRenderPipelineDescriptor()
         pipelineDescriptor.vertexFunction = library.makeFunction(name: "main_vertex")
         pipelineDescriptor.fragmentFunction = library.makeFunction(name: "main_fragment")
-        pipelineDescriptor.colorAttachments[0].pixelFormat = .bgra8Unorm
         pipelineDescriptor.colorAttachments[0].pixelFormat = .bgra8Unorm
         pipelineDescriptor.sampleCount = 4
 
@@ -62,17 +59,16 @@ class Renderer: NSObject, MTKViewDelegate {
             let location = touch.location(in: nil)
             let vertex = Vertex(
                 position: [Float(location.x), Float(location.y)],
-                pointSize: Float(touch.force) * 20 + 8
+                pointSize: 10 // Float(touch.force) * 20 + 8
             )
             trianglesFlowManager.addKeyVertex(vertex)
         }
-        if trianglesFlowManager.triangleVertices.count > 0 {
-            verticesBuffer = device.makeBuffer(
-                bytes: trianglesFlowManager.triangleVertices,
-                length: trianglesFlowManager.triangleVertices.count * MemoryLayout<Vertex>.stride,
-                options: .storageModeShared
-            )
-        }
+        updateVertices()
+    }
+    
+    func endTouch() {
+        trianglesFlowManager.stop()
+        updateVertices()
     }
 
     func draw(in view: MTKView) {
@@ -98,6 +94,16 @@ class Renderer: NSObject, MTKViewDelegate {
     
     func mtkView(_ view: MTKView, drawableSizeWillChange size: CGSize) {
         updateSize()
+    }
+    
+    func updateVertices() {
+        if trianglesFlowManager.triangleVertices.count > 0 {
+            verticesBuffer = device.makeBuffer(
+                bytes: trianglesFlowManager.triangleVertices,
+                length: trianglesFlowManager.triangleVertices.count * MemoryLayout<Vertex>.stride,
+                options: .storageModeShared
+            )
+        }
     }
     
     private func updateSize() {
