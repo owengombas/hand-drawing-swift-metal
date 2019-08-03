@@ -7,3 +7,7 @@
 - Config n interpolated triangles
 - Add a dot at the start/end of a line (round the line)
 - Colors, pointSize, eraser, ... tools
+- Handle touchesEstimatedPropertiesUpdated
+
+## See also
+- [ios_metal_bezier_renderer](https://github.com/eldade/ios_metal_bezier_renderer)
