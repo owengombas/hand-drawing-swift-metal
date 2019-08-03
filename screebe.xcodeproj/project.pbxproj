@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5A05C60A22F3918D0074DEBD /* Trapezoid.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A05C60922F3918D0074DEBD /* Trapezoid.swift */; };
+		5A05C60C22F46BD10074DEBD /* Triangle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A05C60B22F46BD10074DEBD /* Triangle.swift */; };
+		5A05C60E22F46CBC0074DEBD /* TrianglesFlowManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A05C60D22F46CBC0074DEBD /* TrianglesFlowManager.swift */; };
+		5A05C61222F470570074DEBD /* VertexInfos.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A05C61122F470570074DEBD /* VertexInfos.swift */; };
 		5AAF5A3922F211D1007C39B5 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AAF5A3822F211D1007C39B5 /* AppDelegate.swift */; };
 		5AAF5A3B22F211D1007C39B5 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AAF5A3A22F211D1007C39B5 /* ViewController.swift */; };
 		5AAF5A3E22F211D1007C39B5 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5AAF5A3C22F211D1007C39B5 /* Main.storyboard */; };
@@ -15,6 +19,11 @@
 		5AAF5A4622F211D2007C39B5 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5AAF5A4422F211D2007C39B5 /* LaunchScreen.storyboard */; };
 		5AAF5A5122F211D2007C39B5 /* screebeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AAF5A5022F211D2007C39B5 /* screebeTests.swift */; };
 		5AAF5A5C22F211D2007C39B5 /* screebeUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AAF5A5B22F211D2007C39B5 /* screebeUITests.swift */; };
+		5AC82D0822F35DFD003E99F6 /* Vector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AC82D0722F35DFD003E99F6 /* Vector.swift */; };
+		5AEF9A8222F227A90051ED5F /* Shader.metal in Sources */ = {isa = PBXBuildFile; fileRef = 5AEF9A8122F227A90051ED5F /* Shader.metal */; };
+		5AEF9A8422F3117A0051ED5F /* Renderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AEF9A8322F3117A0051ED5F /* Renderer.swift */; };
+		5AEF9A8922F3126E0051ED5F /* Vertex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AEF9A8822F3126E0051ED5F /* Vertex.swift */; };
+		5AEF9A8B22F3127E0051ED5F /* FragmentInfos.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AEF9A8A22F3127E0051ED5F /* FragmentInfos.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -35,6 +44,10 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		5A05C60922F3918D0074DEBD /* Trapezoid.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Trapezoid.swift; sourceTree = "<group>"; };
+		5A05C60B22F46BD10074DEBD /* Triangle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Triangle.swift; sourceTree = "<group>"; };
+		5A05C60D22F46CBC0074DEBD /* TrianglesFlowManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrianglesFlowManager.swift; sourceTree = "<group>"; };
+		5A05C61122F470570074DEBD /* VertexInfos.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VertexInfos.swift; sourceTree = "<group>"; };
 		5AAF5A3522F211D1007C39B5 /* screebe.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = screebe.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5AAF5A3822F211D1007C39B5 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		5AAF5A3A22F211D1007C39B5 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -49,6 +62,11 @@
 		5AAF5A5722F211D2007C39B5 /* screebeUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = screebeUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		5AAF5A5B22F211D2007C39B5 /* screebeUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = screebeUITests.swift; sourceTree = "<group>"; };
 		5AAF5A5D22F211D2007C39B5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		5AC82D0722F35DFD003E99F6 /* Vector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Vector.swift; sourceTree = "<group>"; };
+		5AEF9A8122F227A90051ED5F /* Shader.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = Shader.metal; sourceTree = "<group>"; };
+		5AEF9A8322F3117A0051ED5F /* Renderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Renderer.swift; sourceTree = "<group>"; };
+		5AEF9A8822F3126E0051ED5F /* Vertex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Vertex.swift; sourceTree = "<group>"; };
+		5AEF9A8A22F3127E0051ED5F /* FragmentInfos.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FragmentInfos.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -99,6 +117,8 @@
 		5AAF5A3722F211D1007C39B5 /* screebe */ = {
 			isa = PBXGroup;
 			children = (
+				5AC82D0622F35DEE003E99F6 /* classes */,
+				5AEF9A8522F311AB0051ED5F /* structs */,
 				5AAF5A3822F211D1007C39B5 /* AppDelegate.swift */,
 				5AAF5A3A22F211D1007C39B5 /* ViewController.swift */,
 				5AAF5A3C22F211D1007C39B5 /* Main.storyboard */,
@@ -106,6 +126,8 @@
 				5AAF5A4422F211D2007C39B5 /* LaunchScreen.storyboard */,
 				5AAF5A4722F211D2007C39B5 /* Info.plist */,
 				5AAF5A3F22F211D1007C39B5 /* screebe.xcdatamodeld */,
+				5AEF9A8122F227A90051ED5F /* Shader.metal */,
+				5AEF9A8322F3117A0051ED5F /* Renderer.swift */,
 			);
 			path = screebe;
 			sourceTree = "<group>";
@@ -126,6 +148,27 @@
 				5AAF5A5D22F211D2007C39B5 /* Info.plist */,
 			);
 			path = screebeUITests;
+			sourceTree = "<group>";
+		};
+		5AC82D0622F35DEE003E99F6 /* classes */ = {
+			isa = PBXGroup;
+			children = (
+				5AC82D0722F35DFD003E99F6 /* Vector.swift */,
+				5A05C60922F3918D0074DEBD /* Trapezoid.swift */,
+				5A05C60B22F46BD10074DEBD /* Triangle.swift */,
+				5A05C60D22F46CBC0074DEBD /* TrianglesFlowManager.swift */,
+			);
+			path = classes;
+			sourceTree = "<group>";
+		};
+		5AEF9A8522F311AB0051ED5F /* structs */ = {
+			isa = PBXGroup;
+			children = (
+				5AEF9A8822F3126E0051ED5F /* Vertex.swift */,
+				5AEF9A8A22F3127E0051ED5F /* FragmentInfos.swift */,
+				5A05C61122F470570074DEBD /* VertexInfos.swift */,
+			);
+			path = structs;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -259,9 +302,18 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5AEF9A8B22F3127E0051ED5F /* FragmentInfos.swift in Sources */,
+				5A05C61222F470570074DEBD /* VertexInfos.swift in Sources */,
+				5AEF9A8222F227A90051ED5F /* Shader.metal in Sources */,
+				5AC82D0822F35DFD003E99F6 /* Vector.swift in Sources */,
+				5A05C60E22F46CBC0074DEBD /* TrianglesFlowManager.swift in Sources */,
 				5AAF5A3B22F211D1007C39B5 /* ViewController.swift in Sources */,
 				5AAF5A4122F211D1007C39B5 /* screebe.xcdatamodeld in Sources */,
+				5AEF9A8422F3117A0051ED5F /* Renderer.swift in Sources */,
 				5AAF5A3922F211D1007C39B5 /* AppDelegate.swift in Sources */,
+				5A05C60C22F46BD10074DEBD /* Triangle.swift in Sources */,
+				5AEF9A8922F3126E0051ED5F /* Vertex.swift in Sources */,
+				5A05C60A22F3918D0074DEBD /* Trapezoid.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
