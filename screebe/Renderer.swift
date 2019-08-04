@@ -59,7 +59,7 @@ class Renderer: NSObject, MTKViewDelegate {
             let location = touch.location(in: nil)
             let vertex = Vertex(
                 position: [Float(location.x), Float(location.y)],
-                pointSize: 10 // Float(touch.force) * 20 + 8
+                pointSize: 5 // Float(touch.force) * 20 + 8
             )
             trianglesFlowManager.addKeyVertex(vertex)
         }
@@ -113,20 +113,5 @@ class Renderer: NSObject, MTKViewDelegate {
             length: MemoryLayout<VertexInfos>.size,
             options: .storageModeShared
         )
-    }
-    
-    private func catmullRom(_ t: Float, _ p0: Float, _ p1: Float, _ p2: Float, _ p3: Float) -> Float {
-        let a = 3 * p1 - p0 - 3 * p2 + p3
-        let b = 2 * p0 - 5 * p1 + 4 * p2 - p3
-        let c = p2 - p0 * t
-        let d = 2 * p1
-        let final = (a * pow(t, 3) + b * pow(t, 2) + c + d)
-        return 0.5 * final
-    }
-    
-    private func catmullRom2D(_ t: Float, _ p0: Vertex, _ p1: Vertex, _ p2: Vertex, _ p3: Vertex) -> Vertex {
-        let x = catmullRom(t, p0.position.x, p1.position.x, p2.position.x, p3.position.x)
-        let y = catmullRom(t, p0.position.y, p1.position.y, p2.position.y, p3.position.y)
-        return Vertex(position: [x, y], color: [0, 0, 0, 1], pointSize: 4)
     }
 }

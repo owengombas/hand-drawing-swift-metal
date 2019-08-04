@@ -21,22 +21,11 @@ class TrianglesFlowManager {
         stop()
     }
     
-    func addKeyVertex(_ lastVertex: Vertex) {
-        var previousVertex: Vertex?
-        var concernedVertex: Vertex?
-        if (keyVertices.count >= 1) {
-            concernedVertex = getKeyVertex(keyVertices.count - 1)
-        }
-        if (keyVertices.count >= 2) {
-            previousVertex = getKeyVertex(keyVertices.count - 2)
-        }
-
-        if concernedVertex != nil {
-            let vBC = Vector(concernedVertex!, lastVertex)
+    func addKeyVertex(_ lastVertex: Vertex, _ interpolate: Bool = false) {
+        if let concernedVertex = getKeyVertex(1) {
+            let vBC = Vector(concernedVertex, lastVertex)
             if vBC.norm >= minimalNorm {
-                keyVertices.append(lastVertex)
-                if previousVertex != nil {
-                    let firstVertex = lastTriangle == nil
+                if let previousVertex = getKeyVertex(2) {
                     if lastTriangle != nil {
                         if lastTriangle!.computed {
                             triangleVertices.append(
@@ -46,13 +35,10 @@ class TrianglesFlowManager {
                     }
                     
                     lastTriangle = Triangle(
-                        previousVertex: previousVertex!,
-                        centerVertex: concernedVertex!,
+                        previousVertex: previousVertex,
+                        centerVertex: concernedVertex,
                         nextVertex: lastVertex
                     )
-                    
-                    if firstVertex {
-                    }
                     
                     triangleVertices.append(contentsOf: lastTriangle!.calculateVertices())
                     
@@ -60,6 +46,7 @@ class TrianglesFlowManager {
 //                        processBuffer()
 //                    }
                 }
+                keyVertices.append(lastVertex)
             }
         } else {
             keyVertices.append(lastVertex)
@@ -82,9 +69,9 @@ class TrianglesFlowManager {
         triangleVertices.append(contentsOf: lastTriangle!.calculateEndRightTriangle())
     }
     
-    private func getKeyVertex(_ index: Int) -> Vertex? {
-        if index > flows.last! {
-            return keyVertices[index]
+    private func getKeyVertex(_ indexFromEnd: Int) -> Vertex? {
+        if keyVertices.count >= indexFromEnd && keyVertices.count - indexFromEnd > flows.last! {
+            return keyVertices[keyVertices.count - indexFromEnd]
         }
 
         return nil
@@ -111,5 +98,36 @@ class TrianglesFlowManager {
             }
             i -= 1
         }
+    }
+    
+    private func interpolate(_ p1: Vertex, _ p2: Vertex, _ p3: Vertex) {
+        let vBC = Vector(p2, p3)
+        for i in 0...Int((vBC.norm / 3).rounded(.up)) {
+            let x = p2.position.x + Float(i)
+            let y = quadInterpolation(x, p1, p2, p3)
+            addKeyVertex(Vertex(position: [x, y]), false)
+        }
+    }
+    
+    private func quadInterpolation(_ x: Float, _ p1: Vertex, _ p2: Vertex, _ p3: Vertex) -> Float {
+        let a = p1.position.y * (x - p2.position.x) * (x - p3.position.x) / ((p1.position.x - p2.position.x) * (p1.position.x - p3.position.x))
+        let b = p2.position.y * (x - p1.position.x) * (x - p3.position.x) / ((p2.position.x - p1.position.x) * (p2.position.x - p3.position.x))
+        let c = p3.position.y * (x - p1.position.x) * (x - p2.position.x) / ((p3.position.x - p1.position.x) * (p3.position.x - p2.position.x))
+        return a + b + c
+    }
+    
+    private func catmullRom(_ t: Float, _ p0: Float, _ p1: Float, _ p2: Float, _ p3: Float) -> Float {
+        let a = 3 * p1 - p0 - 3 * p2 + p3
+        let b = 2 * p0 - 5 * p1 + 4 * p2 - p3
+        let c = p2 - p0 * t
+        let d = 2 * p1
+        let final = (a * pow(t, 3) + b * pow(t, 2) + c + d)
+        return 0.5 * final
+    }
+    
+    private func catmullRom2D(_ t: Float, _ p0: Vertex, _ p1: Vertex, _ p2: Vertex, _ p3: Vertex) -> Vertex {
+        let x = catmullRom(t, p0.position.x, p1.position.x, p2.position.x, p3.position.x)
+        let y = catmullRom(t, p0.position.y, p1.position.y, p2.position.y, p3.position.y)
+        return Vertex(position: [x, y], color: [0, 0, 0, 1], pointSize: 4)
     }
 }

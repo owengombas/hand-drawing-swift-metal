@@ -40,6 +40,6 @@ class ViewController: UIViewController {
     }
     
     override func touchesEstimatedPropertiesUpdated(_ touches: Set<UITouch>) {
-        // renderer.touched(touches, nil)
+        renderer.touched(touches, nil)
     }
 }
