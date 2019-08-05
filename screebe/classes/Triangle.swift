@@ -12,12 +12,13 @@ class Triangle {
     private var _previousVertex: Vertex
     private var _nextVertex: Vertex
     private var _centerVertex: Vertex
+    private var _vAB: Vector
+    private var _vBC: Vector
     private var _aVertex: Vertex?
     private var _bVertex: Vertex?
     private var _cVertex: Vertex?
-    private var _vAB: Vector
-    private var _vBC: Vector
     private var _computed: Bool = false
+
     var computed: Bool {
         return _computed
     }
