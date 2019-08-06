@@ -1,9 +1,9 @@
 # Draw on an iOS device using Metal
 
-## WIP:
+## WIP
 - Catmull Rom interpolation
 
-## TODO:
+## TODO
 - README 😬
 - Force (pointsize) changed -> correct link between triangles
 - Move "triangle interpolated vertices calculation" to shaders
@@ -21,12 +21,12 @@
 A line is composed of a multitude of interconnected triangles, they are generated from "key point" which are the points having as coordinates the places where you have slipped your finger/pen. Several linked triangles can form a trapeze which allows to manage the force communicated with the apple pen in order to vary the width of the line on the same line.
 
 ## Interpolation
-I use the Catmull Rom interpolation, it generates points between each "key points":
-![](https://i.imgur.com/dZ98weR.jpg)
-*With interpolation (red points)*
+I use the Catmull Rom interpolation, it generates points between each "key points":  
+*With interpolation (red points):*  
+![](https://i.imgur.com/dZ98weR.jpg)  
 
-![](https://i.imgur.com/vXwH07o.jpg)
-*Without interpolation*
+*Without interpolation:*  
+![](https://i.imgur.com/vXwH07o.jpg)  
 
-## See also
+# See also
 - [ios_metal_bezier_renderer](https://github.com/eldade/ios_metal_bezier_renderer)
