@@ -1,5 +1,8 @@
 # Draw on an iOS device using Metal
 
+## WIP:
+- Catmull Rom interpolation
+
 ## TODO:
 - README 😬
 - Force (pointsize) changed -> correct link between triangles
