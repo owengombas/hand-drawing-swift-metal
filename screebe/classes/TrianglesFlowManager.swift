@@ -14,6 +14,7 @@ class TrianglesFlowManager {
     var triangleVertices: [Vertex] = []
     var flows: [Int] = []
     var minimumNorm: Float = 2
+    var minimumNormKeyVertex: Float = 0
     var minimumAngle: Float = 0.15
     var interpolationDivider: Float = 8 // Higher -> use more RAM
     private var _keyVertices: [Vertex] = []
@@ -27,22 +28,30 @@ class TrianglesFlowManager {
     }
     
     func addKeyVertex(_ vertex: Vertex) {
-        if _keyVertices.count >= 4 {
-            _keyVertices.remove(at: 0)
-        }
-        _keyVertices.append(vertex)
+        var normOkay = true
         
-        if (_keyVertices.count >= 3) {
-            let interpolationB = getKeyVertex(1)!
-            let interpolationA = getKeyVertex(2) ?? interpolationB
-            let beforeInterpolation = getKeyVertex(3) ?? vertex
+        if _keyVertices.count >= 2 {
+            normOkay = Vector(getKeyVertex(0)!, vertex).norm > minimumNormKeyVertex
+        }
+        
+        if normOkay {
+            if _keyVertices.count >= 4 {
+                _keyVertices.remove(at: 0)
+            }
+            _keyVertices.append(vertex)
             
-            interpolateCatmullRom(
-                beforeInterpolation,
-                interpolationA,
-                interpolationB,
-                vertex
-            )
+            if (_keyVertices.count >= 3) {
+                let interpolationB = getKeyVertex(1)!
+                let interpolationA = getKeyVertex(2) ?? interpolationB
+                let beforeInterpolation = getKeyVertex(3) ?? vertex
+                
+                interpolateCatmullRom(
+                    beforeInterpolation,
+                    interpolationA,
+                    interpolationB,
+                    vertex
+                )
+            }
         }
     }
     
@@ -130,7 +139,11 @@ class TrianglesFlowManager {
     
     private func interpolateCatmullRom(_ p0: Vertex, _ p1: Vertex, _ p2: Vertex, _ p3: Vertex) {
         let vBC = Vector(p1, p2)
-        let to = (vBC.norm / interpolationDivider).rounded(.up)
+        let vBA = Vector(p1, p0)
+        let angle = vBA.angleDeg(with: vBC)
+        
+        // More points when the angle is bigger
+        let to = ((vBC.norm / interpolationDivider) * (1 + angle / 10)).rounded(.up)
 
         var i: Float = to - 1
         while i >= 0 {
