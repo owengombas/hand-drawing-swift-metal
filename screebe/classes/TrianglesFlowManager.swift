@@ -145,7 +145,7 @@ class TrianglesFlowManager {
         // More points when the angle is bigger
         let to = ((vBC.norm / interpolationDivider) * (1 + angle / 10)).rounded(.up)
 
-        var i: Float = to - 1
+        var i: Float = to
         while i >= 0 {
             let t = 1 - i / to
             
