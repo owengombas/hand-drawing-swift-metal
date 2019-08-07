@@ -91,15 +91,30 @@ class Triangle {
     }
     
     func calculateEndRightTriangle() -> [Vertex] {
-        let vcb = Vector(_cVertex!, _bVertex!).divide(2)
-        let dVertex = vcb
-            .rotatePerp()
-            .normalize()
-            .scale(vcb.norm)
-            .addVector(_cVertex!.toVector())
-            .addVector(vcb)
-            .toVertex()
+        let vSemiba = Vector(_bVertex!, _aVertex!).divide(2)
+        let vSemibac = Vector(
+            vSemiba.addVector(_bVertex!.toVector()).toVertex(),
+            _cVertex!
+        )
+        let dVertex = Vertex(position: [
+            _cVertex!.position.x - vSemiba.x,
+            _bVertex!.position.y + vSemibac.y
+        ])
         
         return [_bVertex!, _cVertex!, dVertex]
+    }
+    
+    func calculateStartRightTriangle() -> [Vertex] {
+        let vSemiab = Vector(_aVertex!, _bVertex!).divide(2)
+        let vSemiabc = Vector(
+            vSemiab.addVector(_aVertex!.toVector()).toVertex(),
+            _cVertex!
+        )
+        let dVertex = Vertex(position: [
+            _cVertex!.position.x - vSemiab.x,
+            _aVertex!.position.y + vSemiabc.y
+        ])
+        
+        return [_aVertex!, _cVertex!, dVertex]
     }
 }

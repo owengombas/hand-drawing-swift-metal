@@ -6,12 +6,23 @@
          contextName = "TrianglesFlowManager.processBuffer():TrianglesFlowManager.swift">
       </ContextState>
       <ContextState
+         contextName = "TrianglesFlowManager.add(_:_:):TrianglesFlowManager.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "_lastTriangle">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
          contextName = "TrianglesFlowManager.addKeyVertex(_:):TrianglesFlowManager.swift">
          <PersistentStrings>
             <PersistentString
                value = "">
             </PersistentString>
          </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "TrianglesFlowManager.addKeyVertex(_:_:):TrianglesFlowManager.swift">
       </ContextState>
       <ContextState
          contextName = "TrianglesFlowManager.getKeyVertex(_:):TrianglesFlowManager.swift">
@@ -28,7 +39,16 @@
          contextName = "TrianglesFlowManager.interpolateCatmullRom(_:_:_:_:):TrianglesFlowManager.swift">
          <PersistentStrings>
             <PersistentString
-               value = "p1.position.y">
+               value = "Vector(vertex.position.x, vertex.position.y)">
+            </PersistentString>
+            <PersistentString
+               value = "keyVertices.count">
+            </PersistentString>
+            <PersistentString
+               value = "Vector(p3.position.x, p3.position.y)">
+            </PersistentString>
+            <PersistentString
+               value = "Vector(p2.position.x, p2.position.y)">
             </PersistentString>
             <PersistentString
                value = "Vector(p1.position.x, p1.position.y)">

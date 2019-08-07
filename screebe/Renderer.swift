@@ -52,7 +52,8 @@ class Renderer: NSObject, MTKViewDelegate {
         _commandQueue = _device.makeCommandQueue()!
         _trianglesFlowManager = TrianglesFlowManager()
         updateSize()
-        
+
+        updateVertices()
     }
     
     func touched(_ touches: Set<UITouch>, _ event: UIEvent?) {
@@ -76,15 +77,17 @@ class Renderer: NSObject, MTKViewDelegate {
         let verticesCommandBuffer = _commandQueue.makeCommandBuffer()!
         let verticesCommandEncoder = verticesCommandBuffer.makeRenderCommandEncoder(descriptor: view.currentRenderPassDescriptor!)!
 
-        if _trianglesFlowManager.keyVertices.count > 0 {
+        if _trianglesFlowManager.triangleVertices.count > 0 {
             verticesCommandEncoder.setRenderPipelineState(_renderPipelineState)
             verticesCommandEncoder.setVertexBuffer(_verticesInfosBuffer, offset: 0, index: 0)
             verticesCommandEncoder.setVertexBuffer(_verticesBuffer, offset: 0, index: 1)
             // verticesCommandEncoder.setTriangleFillMode(.lines)
+            
+            // TODO: drawIndexedPrimitives
             verticesCommandEncoder.drawPrimitives(
-                type: .point,
+                type: .triangle,
                 vertexStart: 0,
-                vertexCount: _trianglesFlowManager.keyVertices.count
+                vertexCount: _trianglesFlowManager.triangleVertices.count
             )
         }
         
@@ -98,10 +101,10 @@ class Renderer: NSObject, MTKViewDelegate {
     }
     
     func updateVertices() {
-        if _trianglesFlowManager.keyVertices.count > 0 {
+        if _trianglesFlowManager.triangleVertices.count > 0 {
             _verticesBuffer = _device.makeBuffer(
-                bytes: _trianglesFlowManager.keyVertices,
-                length: _trianglesFlowManager.keyVertices.count * MemoryLayout<Vertex>.stride,
+                bytes: _trianglesFlowManager.triangleVertices,
+                length: _trianglesFlowManager.triangleVertices.count * MemoryLayout<Vertex>.stride,
                 options: .storageModeShared
             )
         }
