@@ -39,7 +39,11 @@ class Vector {
     }
     
     func angle(with: Vector) -> Float {
-        return acos(scalarProduct(with: with) / (norm * with.norm))
+        return acos(abs(scalarProduct(with: with) / (norm * with.norm)))
+    }
+    
+    func angleDeg(with: Vector) -> Float {
+        return 180 / Float.pi * angle(with: with)
     }
     
     func scalarProduct(with: Vector) -> Float {

@@ -30,9 +30,11 @@ vertex Vertex main_vertex(
   uint vertexId [[ vertex_id ]]
 ) {
     Vertex out = vertices[vertexId];
+
     out.position.x = 2 * (out.position.x / infos.width - 0.5);
     out.position.y = -2 * (out.position.y / infos.height - 0.5);
     out.position = vector_float4(out.position.x, out.position.y, 0, 1);
+
     return out;
 }
 

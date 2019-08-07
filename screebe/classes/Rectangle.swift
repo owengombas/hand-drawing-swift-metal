@@ -1,5 +1,5 @@
 //
-//  Trapezoid.swift
+//  Rectangle.swift
 //  screebe
 //
 //  Created by Owen on 05.08.19.
@@ -8,6 +8,7 @@
 
 import Foundation
 
-class Trapezoid {
-    
+class Rectangle {
+    var endVertex: Vertex
+    var startVertex: Vertex
 }

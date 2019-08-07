@@ -10,48 +10,50 @@ import UIKit
 import MetalKit
 
 class Renderer: NSObject, MTKViewDelegate {
-    private var device: MTLDevice!
-    private var commandQueue: MTLCommandQueue!
-    private var pipelineState: MTLRenderPipelineState!
-    private var pipelineDescriptor: MTLRenderPipelineDescriptor!
-    private var vertices: [Vertex]!
-    private var joiners: [Vector]!
-    private var verticesBuffer: MTLBuffer!
-    private var verticesInfosBuffer: MTLBuffer!
-    private var fragmentBuffer: MTLBuffer!
-    private var view: MTKView!
-    private var trianglesFlowManager: TrianglesFlowManager!
+    private var _device: MTLDevice!
+    private var _commandQueue: MTLCommandQueue!
+    
+    private var _renderPipelineState: MTLRenderPipelineState!
+    private var _renderPipelineDescriptor: MTLRenderPipelineDescriptor!
+    
+    private var _verticesBuffer: MTLBuffer!
+    private var _verticesInfosBuffer: MTLBuffer!
+    private var _fragmentBuffer: MTLBuffer!
+    
+    private var _view: MTKView!
+    private var _trianglesFlowManager: TrianglesFlowManager!
     
     init(_ mtkView: MTKView) {
         super.init()
 
-        view = mtkView
+        _view = mtkView
 
-        device = mtkView.device
+        _device = mtkView.device
 
         mtkView.preferredFramesPerSecond = 120
         mtkView.sampleCount = 4
         
-        let library = device.makeDefaultLibrary()!
-        pipelineDescriptor = MTLRenderPipelineDescriptor()
-        pipelineDescriptor.vertexFunction = library.makeFunction(name: "main_vertex")
-        pipelineDescriptor.fragmentFunction = library.makeFunction(name: "main_fragment")
-        pipelineDescriptor.colorAttachments[0].pixelFormat = .bgra8Unorm
-        pipelineDescriptor.sampleCount = 4
+        let library = _device.makeDefaultLibrary()!
+        _renderPipelineDescriptor = MTLRenderPipelineDescriptor()
+        _renderPipelineDescriptor.vertexFunction = library.makeFunction(name: "main_vertex")
+        _renderPipelineDescriptor.fragmentFunction = library.makeFunction(name: "main_fragment")
+        _renderPipelineDescriptor.colorAttachments[0].pixelFormat = .bgra8Unorm
+        _renderPipelineDescriptor.sampleCount = 4
 
         do {
-            pipelineState = try device.makeRenderPipelineState(descriptor: pipelineDescriptor)
+            _renderPipelineState = try _device.makeRenderPipelineState(descriptor: _renderPipelineDescriptor)
         } catch let error as NSError {
             print("error: \(error.localizedDescription)")
         }
         
         mtkView.clearColor = MTLClearColor(red: 1, green: 1, blue: 1, alpha: 1.0)
         mtkView.isOpaque = false
-        
-        commandQueue = device.makeCommandQueue()!
-        vertices = []
-        trianglesFlowManager = TrianglesFlowManager()
+
+        _commandQueue = _device.makeCommandQueue()!
+        _trianglesFlowManager = TrianglesFlowManager()
         updateSize()
+
+        updateVertices()
     }
     
     func touched(_ touches: Set<UITouch>, _ event: UIEvent?) {
@@ -61,29 +63,31 @@ class Renderer: NSObject, MTKViewDelegate {
                 position: [Float(location.x), Float(location.y)],
                 pointSize: 5 // Float(touch.force) * 20 + 8
             )
-            trianglesFlowManager.addKeyVertex(vertex)
+            _trianglesFlowManager.addKeyVertex(vertex)
         }
         updateVertices()
     }
     
     func endTouch() {
-        trianglesFlowManager.stop()
+        _trianglesFlowManager.stop()
         updateVertices()
     }
 
     func draw(in view: MTKView) {
-        let verticesCommandBuffer = commandQueue.makeCommandBuffer()!
+        let verticesCommandBuffer = _commandQueue.makeCommandBuffer()!
         let verticesCommandEncoder = verticesCommandBuffer.makeRenderCommandEncoder(descriptor: view.currentRenderPassDescriptor!)!
 
-        if trianglesFlowManager.triangleVertices.count > 0 {
-            verticesCommandEncoder.setRenderPipelineState(pipelineState)
-            verticesCommandEncoder.setVertexBuffer(verticesInfosBuffer, offset: 0, index: 0)
-            verticesCommandEncoder.setVertexBuffer(verticesBuffer, offset: 0, index: 1)
+        if _trianglesFlowManager.triangleVertices.count > 0 {
+            verticesCommandEncoder.setRenderPipelineState(_renderPipelineState)
+            verticesCommandEncoder.setVertexBuffer(_verticesInfosBuffer, offset: 0, index: 0)
+            verticesCommandEncoder.setVertexBuffer(_verticesBuffer, offset: 0, index: 1)
             // verticesCommandEncoder.setTriangleFillMode(.lines)
+            
+            // TODO: drawIndexedPrimitives
             verticesCommandEncoder.drawPrimitives(
                 type: .triangle,
                 vertexStart: 0,
-                vertexCount: trianglesFlowManager.triangleVertices.count
+                vertexCount: _trianglesFlowManager.triangleVertices.count
             )
         }
         
@@ -97,18 +101,18 @@ class Renderer: NSObject, MTKViewDelegate {
     }
     
     func updateVertices() {
-        if trianglesFlowManager.triangleVertices.count > 0 {
-            verticesBuffer = device.makeBuffer(
-                bytes: trianglesFlowManager.triangleVertices,
-                length: trianglesFlowManager.triangleVertices.count * MemoryLayout<Vertex>.stride,
+        if _trianglesFlowManager.triangleVertices.count > 0 {
+            _verticesBuffer = _device.makeBuffer(
+                bytes: _trianglesFlowManager.triangleVertices,
+                length: _trianglesFlowManager.triangleVertices.count * MemoryLayout<Vertex>.stride,
                 options: .storageModeShared
             )
         }
     }
     
     private func updateSize() {
-        var verticesInfos = VertexInfos(width: Float(view.bounds.width), height: Float(view.bounds.height))
-        verticesInfosBuffer = device.makeBuffer(
+        var verticesInfos = VertexInfos(width: Float(_view.bounds.width), height: Float(_view.bounds.height))
+        _verticesInfosBuffer = _device.makeBuffer(
             bytes: &verticesInfos,
             length: MemoryLayout<VertexInfos>.size,
             options: .storageModeShared
