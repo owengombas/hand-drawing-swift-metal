@@ -17,7 +17,7 @@ I use the Catmull Rom interpolation, it generates points between each "key point
 *With interpolation:*  
 ![](https://i.imgur.com/dw193ag.jpg)
 
-*Without interpolation (only the points that are produced from your finger/pen touches):*  
+*Without interpolation (only the points that are produced from your finger/pen touches = "key points"):*  
 ![](https://i.imgur.com/UTst8CB.jpg)  
 
 ## See also
