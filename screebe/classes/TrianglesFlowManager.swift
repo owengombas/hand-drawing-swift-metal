@@ -139,7 +139,6 @@ class TrianglesFlowManager {
     }
     
     private func getVertex(_ indexFromEnd: Int) -> Vertex? {
-        let index = vertices.count - (indexFromEnd + 1)
         let element = getArraySafe(vertices, indexFromEnd)
         return element != nil ? element : nil
     }
