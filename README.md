@@ -23,3 +23,5 @@ I use the Catmull Rom interpolation, it generates points between each **key poin
 ## See also
 - [ios_metal_bezier_renderer](https://github.com/eldade/ios_metal_bezier_renderer)
 - [Catmull–Rom spline interpolation](https://en.wikipedia.org/wiki/Centripetal_Catmull–Rom_spline)
+- [Ramer-Douglas-Peucker algorithm](https://en.m.wikipedia.org/wiki/Ramer–Douglas–Peucker_algorithm)
+- [Helpful StackOverflow question](https://stackoverflow.com/questions/42889699/smooth-drawing-with-apple-pencil)
