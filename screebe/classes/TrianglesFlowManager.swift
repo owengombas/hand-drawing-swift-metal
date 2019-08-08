@@ -10,6 +10,7 @@ import Foundation
 import MetalKit
 
 class TrianglesFlowManager {
+    var indices: [UInt32] = []
     var vertices: [Vertex] = []
     var triangleVertices: [Vertex] = []
     var flows: [Int] = []
@@ -35,11 +36,8 @@ class TrianglesFlowManager {
         }
         
         if normOkay {
-            if _keyVertices.count >= 4 {
-                _keyVertices.remove(at: 0)
-            }
-            _keyVertices.append(vertex)
-            
+            appendAndMaintainArrayLength(&_keyVertices, vertex, length: 4)
+
             if (_keyVertices.count >= 3) {
                 let interpolationB = getKeyVertex(1)!
                 let interpolationA = getKeyVertex(2) ?? interpolationB
@@ -56,16 +54,17 @@ class TrianglesFlowManager {
     }
     
     func stop() {
-        let nb = vertices.count - 1
+        let nb = indices.count - 1
 
         if flows.last != nb {
             flows.append(nb)
         }
 
-        if _lastTriangle != nil {
-            addTriangleVertices(_lastTriangle!.calculateEndRightTriangle())
-        }
+//        if _lastTriangle != nil {
+//            addTriangleVertices(_lastTriangle!.calculateEndRightTriangle())
+//        }
 
+        vertices.removeAll()
         _keyVertices.removeAll()
         _lastTriangle = nil
     }
@@ -87,10 +86,13 @@ class TrianglesFlowManager {
         }
 
         if normOkay && angleOkay {
-            vertices.append(vertex)
-            
             if _lastTriangle != nil {
-                addTriangleVertices(_lastTriangle!.calculateJoinTriangle(newVertex: vertex))
+                // Join triangle
+                indices.append(contentsOf: [
+                    UInt32(triangleVertices.count - 1),
+                    UInt32(triangleVertices.count),
+                    UInt32(triangleVertices.count + 2)
+                ])
             }
             
             if
@@ -105,16 +107,30 @@ class TrianglesFlowManager {
                     nextVertex: vertex
                 )
                 addTriangleVertices(_lastTriangle!.calculateVertices())
-                
-                // Make a rectangle
+
                 if newFlow {
-                    addTriangleVertices(_lastTriangle!.calculateStartRightTriangle())
+                    // ...
                 }
             }
+
+            appendAndMaintainArrayLength(&vertices, vertex, length: 3)
         }
     }
     
-    private func addTriangleVertices(_ vertices: [Vertex]) {
+    private func appendAndMaintainArrayLength<T>(_ array: inout [T], _ element: T, length: Int) {
+        if array.count >= length {
+            array.remove(at: 0)
+        }
+        array.append(element)
+    }
+    
+    private func addTriangleVertices(_ vertices: [Vertex], _ indexes: [Int] = []) {
+        indices.append(contentsOf: indexes.map{ UInt32($0) })
+
+        for i in 0..<(3 - indexes.count) {
+            indices.append(UInt32(triangleVertices.count + i))
+        }
+
         triangleVertices.append(contentsOf: vertices)
     }
     
@@ -125,7 +141,7 @@ class TrianglesFlowManager {
     private func getVertex(_ indexFromEnd: Int) -> Vertex? {
         let index = vertices.count - (indexFromEnd + 1)
         let element = getArraySafe(vertices, indexFromEnd)
-        return element != nil && index > flows.last! ? element : nil
+        return element != nil ? element : nil
     }
     
     private func getArraySafe<T>(_ array: [T], _ indexFromEnd: Int) -> T? {

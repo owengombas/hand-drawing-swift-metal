@@ -17,10 +17,6 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         
         _mtkView = self.view as? MTKView
-        _mtkView.device = MTLCreateSystemDefaultDevice()
-
-        _mtkView.clearColor = MTLClearColor(red: 1, green: 1, blue: 1, alpha: 1.0)
-        _mtkView.isOpaque = false
 
         _renderer = Renderer(_mtkView)
         _mtkView.delegate = _renderer

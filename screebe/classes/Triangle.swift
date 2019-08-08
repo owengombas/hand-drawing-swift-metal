@@ -9,15 +9,15 @@
 import Foundation
 
 class Triangle {
-    private var _previousVertex: Vertex
-    private var _nextVertex: Vertex
-    private var _centerVertex: Vertex
     private var _vAB: Vector
     private var _vBC: Vector
-    private var _aVertex: Vertex?
-    private var _bVertex: Vertex?
-    private var _cVertex: Vertex?
     private var _computed: Bool = false
+    var previousVertex: Vertex
+    var nextVertex: Vertex
+    var centerVertex: Vertex
+    var aVertex: Vertex?
+    var bVertex: Vertex?
+    var cVertex: Vertex?
 
     var computed: Bool {
         return _computed
@@ -34,11 +34,11 @@ class Triangle {
         centerVertex: Vertex,
         nextVertex: Vertex
     ) {
-        _previousVertex = previousVertex
-        _centerVertex = centerVertex
-        _nextVertex = nextVertex
-        _vAB = Vector(_previousVertex, _centerVertex)
-        _vBC = Vector(_centerVertex, _nextVertex)
+        self.previousVertex = previousVertex
+        self.centerVertex = centerVertex
+        self.nextVertex = nextVertex
+        _vAB = Vector(previousVertex, centerVertex)
+        _vBC = Vector(centerVertex, nextVertex)
     }
     
     func calculateVertices() -> [Vertex] {
@@ -53,68 +53,68 @@ class Triangle {
         // OB is centerVertex
         // OC is lastVertex
 
-        let vOB = _centerVertex.toVector()
+        let vOB = centerVertex.toVector()
         
         let vnAB = _vAB.rotatePerp().normalize()
         let vnBC = _vBC.rotatePerp().normalize()
         
-        let vBc = vnAB.addVector(vnBC).normalize().scale(_centerVertex.pointSize)
+        let vBc = vnAB.addVector(vnBC).normalize().scale(centerVertex.pointSize)
         
-        _aVertex = vOB
+        aVertex = vOB
             .substractVector(vAB.divide(2))
-            .substractVector(vnAB.scale(_centerVertex.pointSize))
+            .substractVector(vnAB.scale(centerVertex.pointSize))
             .toVertex()
-        _bVertex = vOB
+        bVertex = vOB
             .addVector(vBC.divide(2))
-            .substractVector(vnBC.scale(_centerVertex.pointSize))
+            .substractVector(vnBC.scale(centerVertex.pointSize))
             .toVertex()
-        _cVertex = vOB.addVector(vBc).toVertex()
+        cVertex = vOB.addVector(vBc).toVertex()
         
         _computed = true
         
-        return [_aVertex!, _bVertex!, _cVertex!]
+        return [aVertex!, bVertex!, cVertex!]
     }
     
-    func calculateJoinTriangle(newVertex: Vertex) -> [Vertex] {
-        let vOC = _nextVertex.toVector()
-        let vBC = Vector(_centerVertex, _nextVertex)
-        let vCD = Vector(_nextVertex, newVertex)
+    func calculateJoinTriangleVertex(newVertex: Vertex) -> Vertex {
+        let vOC = nextVertex.toVector()
+        let vBC = Vector(centerVertex, nextVertex)
+        let vCD = Vector(nextVertex, newVertex)
         
         let vnBC = vBC.rotatePerp().normalize()
         let vnCD = vCD.rotatePerp().normalize()
         
-        let vCc = vnBC.addVector(vnCD).normalize().scale(_nextVertex.pointSize)
+        let vCc = vnBC.addVector(vnCD).normalize().scale(nextVertex.pointSize)
         
         let dVertex = vOC.addVector(vCc).toVertex()
         
-        return [_bVertex!, _cVertex!, dVertex]
+        return dVertex
     }
     
-    func calculateEndRightTriangle() -> [Vertex] {
-        let vSemiba = Vector(_bVertex!, _aVertex!).divide(2)
+    func calculateEndRightTriangle() -> Vertex {
+        let vSemiba = Vector(bVertex!, aVertex!).divide(2)
         let vSemibac = Vector(
-            vSemiba.addVector(_bVertex!.toVector()).toVertex(),
-            _cVertex!
+            vSemiba.addVector(bVertex!.toVector()).toVertex(),
+            cVertex!
         )
         let dVertex = Vertex(position: [
-            _cVertex!.position.x - vSemiba.x,
-            _bVertex!.position.y + vSemibac.y
+            cVertex!.position.x - vSemiba.x,
+            bVertex!.position.y + vSemibac.y
         ])
         
-        return [_bVertex!, _cVertex!, dVertex]
+        return dVertex
     }
     
-    func calculateStartRightTriangle() -> [Vertex] {
-        let vSemiab = Vector(_aVertex!, _bVertex!).divide(2)
+    func calculateStartRightTriangle() -> Vertex {
+        let vSemiab = Vector(aVertex!, bVertex!).divide(2)
         let vSemiabc = Vector(
-            vSemiab.addVector(_aVertex!.toVector()).toVertex(),
-            _cVertex!
+            vSemiab.addVector(aVertex!.toVector()).toVertex(),
+            cVertex!
         )
         let dVertex = Vertex(position: [
-            _cVertex!.position.x - vSemiab.x,
-            _aVertex!.position.y + vSemiabc.y
+            cVertex!.position.x - vSemiab.x,
+            aVertex!.position.y + vSemiabc.y
         ])
         
-        return [_aVertex!, _cVertex!, dVertex]
+        return dVertex
     }
 }

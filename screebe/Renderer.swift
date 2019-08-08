@@ -10,6 +10,8 @@ import UIKit
 import MetalKit
 
 class Renderer: NSObject, MTKViewDelegate {
+    private let _sampleCount = 4
+
     private var _device: MTLDevice!
     private var _commandQueue: MTLCommandQueue!
     
@@ -17,6 +19,7 @@ class Renderer: NSObject, MTKViewDelegate {
     private var _renderPipelineDescriptor: MTLRenderPipelineDescriptor!
     
     private var _verticesBuffer: MTLBuffer!
+    private var _verticesIndicesBuffer: MTLBuffer!
     private var _verticesInfosBuffer: MTLBuffer!
     private var _fragmentBuffer: MTLBuffer!
     
@@ -26,19 +29,17 @@ class Renderer: NSObject, MTKViewDelegate {
     init(_ mtkView: MTKView) {
         super.init()
 
-        _view = mtkView
-
-        _device = mtkView.device
-
+        mtkView.device = MTLCreateSystemDefaultDevice()!
         mtkView.preferredFramesPerSecond = 120
-        mtkView.sampleCount = 4
+        mtkView.sampleCount = _sampleCount
+        _device = mtkView.device
         
         let library = _device.makeDefaultLibrary()!
         _renderPipelineDescriptor = MTLRenderPipelineDescriptor()
         _renderPipelineDescriptor.vertexFunction = library.makeFunction(name: "main_vertex")
         _renderPipelineDescriptor.fragmentFunction = library.makeFunction(name: "main_fragment")
         _renderPipelineDescriptor.colorAttachments[0].pixelFormat = .bgra8Unorm
-        _renderPipelineDescriptor.sampleCount = 4
+        _renderPipelineDescriptor.sampleCount = _sampleCount
 
         do {
             _renderPipelineState = try _device.makeRenderPipelineState(descriptor: _renderPipelineDescriptor)
@@ -51,21 +52,24 @@ class Renderer: NSObject, MTKViewDelegate {
 
         _commandQueue = _device.makeCommandQueue()!
         _trianglesFlowManager = TrianglesFlowManager()
-        updateSize()
+        _view = mtkView
 
+        updateSize()
         updateVertices()
+
+        mtkView.delegate = self
     }
     
     func touched(_ touches: Set<UITouch>, _ event: UIEvent?) {
         for touch in touches {
             let location = touch.location(in: nil)
             let vertex = Vertex(
-                position: [Float(location.x), Float(location.y)],
-                pointSize: 5 // Float(touch.force) * 20 + 8
+                position: [Float(location.x), Float(location.y)]
+                // pointSize: Float(touch.force) * 20 + 8
             )
             _trianglesFlowManager.addKeyVertex(vertex)
+            updateVertices()
         }
-        updateVertices()
     }
     
     func endTouch() {
@@ -77,17 +81,18 @@ class Renderer: NSObject, MTKViewDelegate {
         let verticesCommandBuffer = _commandQueue.makeCommandBuffer()!
         let verticesCommandEncoder = verticesCommandBuffer.makeRenderCommandEncoder(descriptor: view.currentRenderPassDescriptor!)!
 
-        if _trianglesFlowManager.triangleVertices.count > 0 {
+        if _trianglesFlowManager.indices.count > 0 {
             verticesCommandEncoder.setRenderPipelineState(_renderPipelineState)
             verticesCommandEncoder.setVertexBuffer(_verticesInfosBuffer, offset: 0, index: 0)
             verticesCommandEncoder.setVertexBuffer(_verticesBuffer, offset: 0, index: 1)
             // verticesCommandEncoder.setTriangleFillMode(.lines)
-            
-            // TODO: drawIndexedPrimitives
-            verticesCommandEncoder.drawPrimitives(
+
+            verticesCommandEncoder.drawIndexedPrimitives(
                 type: .triangle,
-                vertexStart: 0,
-                vertexCount: _trianglesFlowManager.triangleVertices.count
+                indexCount: _trianglesFlowManager!.indices.count,
+                indexType: .uint32,
+                indexBuffer: _verticesIndicesBuffer,
+                indexBufferOffset: 0
             )
         }
         
@@ -101,7 +106,12 @@ class Renderer: NSObject, MTKViewDelegate {
     }
     
     func updateVertices() {
-        if _trianglesFlowManager.triangleVertices.count > 0 {
+        if _trianglesFlowManager.indices.count > 0 {
+            _verticesIndicesBuffer = _device.makeBuffer(
+                bytes: _trianglesFlowManager.indices,
+                length: _trianglesFlowManager.indices.count * MemoryLayout<UInt32>.stride,
+                options: .storageModeShared
+            )
             _verticesBuffer = _device.makeBuffer(
                 bytes: _trianglesFlowManager.triangleVertices,
                 length: _trianglesFlowManager.triangleVertices.count * MemoryLayout<Vertex>.stride,
